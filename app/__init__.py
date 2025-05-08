@@ -37,8 +37,6 @@ def create_app():
         return jsonify({"message": "An internal error occurred."}), 500
 
     # Create Database Tables
-    @app.before_first_request
-    def create_tables():
+    with app.app_context():
         db.create_all()
-
-    return app
+        return app
