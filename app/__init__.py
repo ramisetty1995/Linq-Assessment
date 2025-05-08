@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 from .config import Config
 from .extensions import db, jwt, ma, limiter
 from .models import user, contact, note
