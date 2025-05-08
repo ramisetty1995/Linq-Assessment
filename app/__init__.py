@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
+from flask_jwt_extended import JWTManager
 from .config import Config
-from .extensions import db, jwt, ma, limiter
+from .extensions import db, ma, limiter
 from .models import user, contact, note
 from .routes import auth_routes, contact_routes, note_routes
 
@@ -10,7 +11,7 @@ def create_app():
 
     # Initialize extensions
     db.init_app(app)
-    jwt.init_app(app)
+    jwt = JWTManager(app)
     ma.init_app(app)
     limiter.init_app(app)
 
