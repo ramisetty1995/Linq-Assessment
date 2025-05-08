@@ -12,13 +12,33 @@ def create_app():
     db.init_app(app)
     jwt.init_app(app)
     ma.init_app(app)
+    limiter.init_app(app)
 
-    # Register Blueprints
+    # Registering the Blueprints
     app.register_blueprint(auth_routes.bp)
     app.register_blueprint(contact_routes.bp)
     app.register_blueprint(note_routes.bp)
 
-    with app.app_context():
+    # Error Handlers
+    @app.errorhandler(404)
+    def not_found(e):
+        return jsonify({"message": "Resource not found"}), 404
+
+    @app.errorhandler(401)
+    def unauthorized(e):
+        return jsonify({"message": "Unauthorized access"}), 401
+
+    @app.errorhandler(429)
+    def rate_limit_exceeded(e):
+        return jsonify({"message": "Rate limit exceeded. Try again later."}), 429
+
+    @app.errorhandler(Exception)
+    def internal_error(e):
+        return jsonify({"message": "An internal error occurred."}), 500
+
+    # Create Database Tables
+    @app.before_first_request
+    def create_tables():
         db.create_all()
 
     return app
