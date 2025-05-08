@@ -10,7 +10,7 @@ import requests
 
 # Initialize Extensions
 db = SQLAlchemy()
-jwt = JWTManager()
+#jwt = JWTManager()
 ma = Marshmallow()
 
 # Initialize Flask-Limiter

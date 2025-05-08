@@ -11,19 +11,35 @@ login_schema = LoginSchema()
 
 @bp.route('/register', methods=['POST'])
 def register():
-    data = request.get_json()
+    print("Hello Register POST")
+    print(request)
+    input = request.form
+    print(f"Type: {type(input)}")
+    print(input)
+    data = {}
+    try:
+        data['username'] = request.form['username']
+        data['password'] = request.form['password']
+    except Exception as e:
+        print(type(e))
+        print(e)
+        raise e
+    print("Step-2")
+    print(f"Data: {data}")
     errors = user_schema.validate(data)
+    print(f"Errors: {errors}")
     if errors:
         return jsonify(errors), 400
-
+    print("All-Good-1")
     if User.query.filter_by(username=data['username']).first():
         return jsonify({"message": "Username already exists"}), 409
-
+    print("All Good-2")
     user = User(username=data['username'])
     user.set_password(data['password'])
-
+    print("All Good-3")
     db.session.add(user)
     db.session.commit()
+    print("All Good-4")
     return jsonify({"message": "User registered successfully"}), 201
 
 @bp.route('/login', methods=['POST'])

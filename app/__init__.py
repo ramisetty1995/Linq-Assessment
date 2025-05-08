@@ -9,11 +9,15 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    # Temporary hardcoding to check
+    app.config['JWT_SECRET_KEY'] = 'jwt-secret'  # Hardcoded key
+    print(f"Loaded JWT Secret Key: {app.config['JWT_SECRET_KEY']}")  # Debug statement
+
     # Initialize extensions
     db.init_app(app)
-    jwt = JWTManager(app)
     ma.init_app(app)
     limiter.init_app(app)
+    jwt = JWTManager(app)
 
     # Registering the Blueprints
     app.register_blueprint(auth_routes.bp)
