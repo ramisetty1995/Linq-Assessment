@@ -6,9 +6,13 @@ from flask_limiter.util import get_remote_address
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry
 import requests
+
+# Initialize Extensions
 db = SQLAlchemy()
 jwt = JWTManager()
 ma = Marshmallow()
+
+# Initialize Flask-Limiter
 limiter = Limiter(key_func=get_remote_address)
 
 # Retry for Outbound Requests

@@ -1,6 +1,6 @@
 from flask import Flask
 from .config import Config
-from .extensions import db, jwt, ma
+from .extensions import db, jwt, ma, limiter
 from .models import user, contact, note
 from .routes import auth_routes, contact_routes, note_routes
 
