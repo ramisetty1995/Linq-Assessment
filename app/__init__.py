@@ -19,6 +19,11 @@ def create_app():
     app.register_blueprint(contact_routes.bp)
     app.register_blueprint(note_routes.bp)
 
+    @app.route('/')
+    @app.route('/favicon.ico')
+    def home():
+        return jsonify({"message": "Welcome to the Contact Notes API!"}), 200
+
     # Error Handlers
     @app.errorhandler(404)
     def not_found(e):
