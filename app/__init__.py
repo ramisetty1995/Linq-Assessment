@@ -1,9 +1,11 @@
 from flask import Flask, jsonify
+from flask_swagger_ui import get_swaggerui_blueprint
 from flask_jwt_extended import JWTManager
 from .config import Config
 from .extensions import db, ma, limiter
 from .models import user, contact, note
 from .routes import auth_routes, contact_routes, note_routes
+from .swagger import swagger_template, swagger_contact_paths
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +20,19 @@ def create_app():
     ma.init_app(app)
     limiter.init_app(app)
     jwt = JWTManager(app)
+
+    # Swagger setup
+    SWAGGER_URL = '/swagger'
+    API_URL = '/swagger.json'
+    swaggerui_blueprint = get_swaggerui_blueprint(SWAGGER_URL, API_URL)
+    app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+
+    @app.route(API_URL)
+    def swagger_json():
+        swag = swagger_template()
+        swag['paths'].update(swagger_contact_paths())
+        return jsonify(swag)
+
 
     # Registering the Blueprints
     app.register_blueprint(auth_routes.bp)
