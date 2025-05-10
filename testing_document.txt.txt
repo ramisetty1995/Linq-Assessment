@@ -1,0 +1,347 @@
+﻿Testing the API Endpoints
+
+
+Prerequisites: Python 3.0 & Vscode
+
+
+
+
+Running the Project:
+
+
+To run this project first we need to install the dependencies and these dependencies are mentioned in the requirements.txt file and we need ro run this in vscode using the below command to make all the dependencies to be installed.
+
+
+pip install -r requirements.txt
+
+
+Start the Flask Server:
+
+
+We have the run.py file in the project and it is the main start point of the project to start the flask server. To start the server we need to use the below command.
+
+
+python run.py
+
+
+Setup the Environment:
+
+
+Make sure the environmental variables are set correctly. For this you can run the below commands
+
+
+$env:JWT_SECRET_KEY = "jwt-secret"
+$env:SECRET_KEY = "supersecretkey"
+
+
+
+
+Testing the Endpoints using Postman:
+
+
+BASE URL: http://127.0.0.1:5000
+
+
+User Registration:
+
+
+Post Endpoint: http://127.0.0.1:5000/api/auth/register
+
+
+Header: Content-Type: application/json
+
+
+Body: 
+{
+  "username": "ravi",
+  "password": "password123"
+}
+After giving the endpoint, header & body select send to test the user registration.
+
+
+Expected Response:
+
+
+{
+  "message": "User registered successfully"
+}
+
+
+
+
+User Login:
+
+
+Post Endpoint: http://127.0.0.1:5000/api/auth/login
+
+
+Header: Content-Type: application/json
+
+
+Body: 
+{
+  "username": "ravi",
+  "password": "password123"
+}
+
+
+Expected Response:
+
+
+{
+  "access_token": "eyJ0eXViOiJKT1QiLGJh..."
+}
+
+
+Copy this access token from the response for authenticated requests
+
+
+Create Contact:
+
+
+Post Endpoint: http://127.0.0.1:5000/api/contacts
+
+
+Header: 
+Content-Type: application/json
+Authorization: Bearer <copied access token>
+
+
+Body: 
+{
+  "full_name": "John",
+  "email": "john@example.com",
+  "phone": "1234567890"
+}
+
+
+
+
+
+
+Expected Response:
+It will create the contact with status 200 ok
+
+
+{
+  "message": "Contact created successfully"
+}
+
+
+Get All Contacts:
+
+
+Get Endpoint: http://127.0.0.1:5000/api/contacts
+
+
+Header: 
+Authorization: Bearer <copied access token>
+
+
+Expected Response:
+It will give all the contacts
+
+
+[
+  {
+    "full_name": "John",
+    "email": "john@example.com",
+    "phone": "1234567890"
+  }
+]
+
+
+Get Contact By Name:
+
+
+Get Endpoint: http://127.0.0.1:5000/api/contacts/john
+
+
+Header: 
+Authorization: Bearer <copied access token>
+
+
+Expected Response:
+It will give the selected contact details by given name
+
+
+[
+  {
+    "full_name": "Johnathan",
+    "email": "john@example.com",
+    "phone": "1234567890"
+  }
+]
+
+
+
+
+Update a Contact:
+
+
+UPDATE Endpoint: http://127.0.0.1:5000/api/contacts/john
+
+
+Header: 
+Authorization: Bearer <copied access token>
+
+
+Body: 
+{
+  "full_name": "Johnathan",
+  "email": "john@example.com",
+  "phone": "1234567890"
+}
+
+
+Expected Response:
+It will update the contact name from “john” to “johnathan” for the selected contact 
+
+
+{
+  "message": "Contact updated successfully"
+}
+
+
+
+
+Delete a Contact:
+
+
+DELETE Endpoint: http://127.0.0.1:5000/api/contacts/johnathan
+
+
+Header: 
+Authorization: Bearer <copied access token>
+
+
+Expected Response:
+It will deletes the selected contact and displays a message as contact deleted successfully
+
+
+{
+  "message": "Contact deleted successfully"
+}
+
+
+
+
+
+
+Create a Note:
+
+
+POST Endpoint: http://127.0.0.1:5000/api/notes
+
+
+Header: 
+Content-Type: application/json
+Authorization: Bearer <your_access_token>
+
+
+Body: 
+{
+  "contact_name": Johnathan,
+  "content": "Follow up on backend assessment"
+}
+
+
+Expected Response:
+It will give the message as note created successfully
+
+
+{
+  "message": "Note created successfully"
+}
+
+
+
+
+Get All Notes:
+
+
+GET Endpoint: http://127.0.0.1:5000/api/notes
+
+
+Header: 
+
+
+Authorization: Bearer <your_access_token>
+
+
+Expected Response:
+It will display the notes of all the contacts like below
+
+
+{
+  "contact_name": Johnathan,
+  "content": "Follow up on backend assessment"
+}
+
+
+
+
+Update a Note:
+
+
+UPDATE Endpoint: http://127.0.0.1:5000/api/notes/johnathan
+
+
+
+
+Header:
+
+
+Content-Type: application/json
+Authorization: Bearer <copied_access_token>
+
+
+ 
+
+
+Body: 
+[
+  {
+    "contact_name": Johnathan,
+    "content": "Kind reminder on backend assessment"
+  }
+]
+
+
+Expected Response:
+It will give the message as Note updated successfully and note will be changed from “follow up on backend assessment” to “Kind reminder on backend assessment”
+
+
+{
+  "message": "Note updated successfully"
+}
+
+
+
+
+Delete a Note:
+
+
+DELETE Endpoint: http://127.0.0.1:5000/api/notes/johnathan
+
+
+Header: 
+Authorization: Bearer <copied access token>
+
+
+Expected Response:
+
+
+It will give the message as Note deleted successfully
+
+
+{
+  "message": "Contact deleted successfully"
+}
+
+
+
+
+We can also do the health check here to confirm whether the api is successfully running or not and it will display the status as 200 ok
+For this we can use the below command
+http://127.0.0.1:5000/api/health
